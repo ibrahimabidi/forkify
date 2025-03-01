@@ -1,0 +1,9 @@
+# Fichiers et dossiers générés automatiquement
+node_modules/
+.parcel-cache/
+dist/
+
+# Fichiers spécifiques à l'éditeur
+*.log
+.DS_Store
+Thumbs.db
