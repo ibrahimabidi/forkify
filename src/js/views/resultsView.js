@@ -2,6 +2,7 @@ import View from './View.js';
 import icons from 'url:../../img/icons.svg'; // Parcel 2
 class ResultsView extends View {
   _parentElement = document.querySelector('.results');
+
   _errorMessage = 'No recipes found for your query! Please try again ;)';
   _message = '';
 
@@ -9,6 +10,7 @@ class ResultsView extends View {
     console.log(this._data);
     return this._data.map(this._generateMarkupPreview).join('');
   }
+  // Make sure this is not null or undefined
 
   _generateMarkupPreview(result) {
     return ` <li class="preview">
