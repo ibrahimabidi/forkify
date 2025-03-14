@@ -15,21 +15,28 @@ export const state = {
 export const loadRecipe = async function (id) {
   try {
     const data = await getJSON(`${API_URL}/${id}`);
+    console.log('Full API Response:', data);
 
     const { recipe } = data.data;
+    console.log('Extracted Recipe:', recipe);
+
     state.recipe = {
       id: recipe.id,
       title: recipe.title,
       publisher: recipe.publisher,
-      sourceUrl: recipe.source_url,
-      image: recipe.image_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-      ingredients: recipe.ingredients,
+      sourceUrl: recipe.source_url, // API has `source_url`, not `sourceUrl`
+      image: recipe.image_url, // API has `image_url`, not `image`
+      servings: recipe.servings ?? 1, // If missing, default to 1
+      cookingTime: recipe.cooking_time ?? 0, // If missing, default to 0
+      ingredients: recipe.ingredients.map(ing => ({
+        quantity: ing.quantity !== null ? Number(ing.quantity) : null, // Fix NaN issue
+        unit: ing.unit || '', // Ensure unit is always a string
+        description: ing.description || '', // Ensure description is always a string
+      })),
     };
-    console.log(state.recipe);
+
+    console.log('Parsed Recipe Object:', state.recipe);
   } catch (err) {
-    // temp error handling
     console.error(`${err} 💥💥💥💥`);
     throw err;
   }
@@ -62,4 +69,16 @@ export const getSearchResultsPage = function (page = state.search.page) {
   const start = (page - 1) * state.search.resultsPerPage; // 0;
   const end = page * state.search.resultsPerPage; // 10;
   return state.search.results.slice(start, end);
+};
+
+export const updateServings = function (newServings) {
+  if (!state.recipe.servings || !newServings) return;
+
+  state.recipe.ingredients.forEach(ing => {
+    if (ing.quantity !== null) {
+      ing.quantity = (ing.quantity * newServings) / state.recipe.servings;
+    }
+  });
+
+  state.recipe.servings = newServings;
 };
