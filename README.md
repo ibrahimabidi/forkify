@@ -49,6 +49,9 @@ export const KEY = 'your-api-key-here';
 - Use the bookmark button to save favorite recipes.
 - Add new recipes using the form.
 
+ ## Live Demo
+ - You can try out the live demo of the Forkify app here: forkify-ibrahimabidi.netlify.app
+
 ## Troubleshooting
 
 - **API Errors (401, 404, 400)**: Check your API key and ensure the recipe ID is correct.
